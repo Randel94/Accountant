@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Accountant.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Accountant.Data
 {
@@ -8,6 +9,9 @@ namespace Accountant.Data
             : base(options)
         {
         }
+
+        public DbSet<TransactionEntity> Transactions { get; set; }
+        public DbSet<TransactionCategoryEntity> TransactionCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
