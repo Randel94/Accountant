@@ -10,6 +10,9 @@ namespace Accountant.Data.EntityConfigurations
         {
             builder.HasOne(x => x.Category)
                 .WithMany(x => x.Transactions);
+
+            builder.Property(x => x.Comment)
+                .IsRequired(false);
         }
     }
 }
