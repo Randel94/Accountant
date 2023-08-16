@@ -1,3 +1,6 @@
+using Accountant.Data;
+using Accountant.Helpers.Extensions;
+using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Web;
 
@@ -20,6 +23,11 @@ try
     builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
     builder.Host.UseNLog();
 
+    //Подключение EF.
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)), ServiceLifetime.Transient);
+
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
@@ -40,6 +48,8 @@ try
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.Services.Migrate();
 
     app.Run("http://*:5000");
 }
